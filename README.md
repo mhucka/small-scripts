@@ -20,3 +20,9 @@ This subdirectory constains scripts useful with Subversion.
 ------------
 
 This subdirectory constains scripts useful on Mac OS X systems.
+
+
+[x-windows-scripts](https://github.com/mhucka/small-scripts/tree/master/x-windows-scripts)
+------------
+
+This subdirectory constains scripts useful for X Windows system environments under Unix/Linux-based operating systems.  (N.B.: these are ancient and I haven't tried them for years.)
