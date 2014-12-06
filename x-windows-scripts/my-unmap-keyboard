@@ -1,0 +1,44 @@
+#!/bin/csh -f
+#
+# Description : Restore default key mappings.
+# Author(s)   : Michael Hucka <hucka@eecs.umich.edu>
+# Organization: University of Michigan EECS DCO
+# Created     : 1997-03-12 23:47 EDT
+# Revision    : $Id: my-unmap-keyboard,v 1.1 2007/01/06 17:59:46 mhucka Exp $
+# $Source: /home/users/mhucka/cvs_roots/mhucka/bin/my-unmap-keyboard,v $
+#
+# This undoes the effects of `my-remap-keyboard'.
+
+switch (${SYS})
+case rs_aix3*:
+    chhwkbd -d500 -r30 < /dev/hft
+    xset m 2 5 c 10
+    xmodmap -e "keysym BackSpace = Delete" \
+	    -e "add mod1 = Alt_L" -e "add mod1 = Alt_R"
+    breaksw
+
+case sgi*:
+    breaksw
+
+case sun*:
+case sparc*:
+    xmodmap -e "keysym BackSpace = Delete BackSpace"
+    # Swap caps lock and control.
+    xmodmap -e "remove Lock = Caps_Lock" \
+	    -e "remove Control = Control_L" \
+	    -e "keysym Control_L = Caps_Lock" \
+	    -e "keysym Caps_Lock = Control_L" \
+	    -e "add Lock = Caps_Lock" -e "add Control = Control_L"
+    # Perform additional remappings.
+    set type = `sunkbd`
+    if ( "$type" == "Type 4 Sun keyboard" ) then
+
+    else if ( "$type" == "Type 5 Sun keyboard" ) then
+	xmodmap -e "keycode 95 = backslash bar" \
+		-e "keycode 50 = Delete BackSpace" \
+		-e "keycode 49 = grave asciitilde" \
+		-e "keycode 36 = Escape"
+    endif
+    unset type
+    breaksw
+endsw

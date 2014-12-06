@@ -1,0 +1,41 @@
+#!/bin/csh -f
+#
+# File name   : my-load-xresources
+# Description : Script to invoke xrdb on .Xresources with my preferred options
+# Author(s)   : Michael Hucka <mhucka@bbb.caltech.edu>
+# Organization: Division of Biology, California Institute of Technology
+# Language    : csh
+# Created     : circa 1997
+# Revision      : $Id: my-load-xresources,v 1.1 2007/01/06 17:59:43 mhucka Exp $
+# $Source: /home/users/mhucka/cvs_roots/mhucka/bin/my-load-xresources,v $
+# 
+# cpp is used so that cpp directives can be used in .Xresources to
+# put conditions around settings.
+#
+# Different UNIXes put cpp in different places.  To work around this, and to
+# package up all the options that I normally pass to xrdb to read the
+# .Xresources file, I wrote this simple script.  That is intended to be
+# called from .xsession at log-in time, and also whenever the resources need
+# to be reloaded.
+#
+# WARNING: this script depends on shell environment variables that are
+# specific to my personal init files.
+#
+
+if (-e /usr/lib/cpp) then
+    set cpp = "-cpp /usr/lib/cpp"
+else if (-e /usr/bin/cpp) then
+    set cpp = "-cpp /usr/bin/cpp"
+else if (-e /usr/ccs/lib/cpp) then
+    set cpp = "-cpp /usr/ccs/lib/cpp"
+else
+    set cpp = ""
+endif
+
+xrdb ${cpp} \
+  -D${HNAME} \
+  -DHNAME=${HNAME} \
+  -D${SYSOS} \
+  -D${SYSOSBASE} \
+  -DHOME=${HOME} \
+  -load ${HOME}/.Xresources

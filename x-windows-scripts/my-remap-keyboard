@@ -1,0 +1,112 @@
+#!/bin/csh -f
+#
+# Description : Remap keyboards to my tastes
+# Author(s)   : Michael Hucka <mhucka@caltech.edu>
+# Organization: California Institute of Technology
+# Created     : 1997-03-12 23:47 EDT
+#
+# WARNING: I remap keyboards (especially Sun keyboards) to suit my needs.
+# The mappings set in this file are almost certainly not going to suit YOUR
+# needs.  Use at your own risk.
+
+switch ($SYSOS)
+case linux*:
+    # [1998-03-25] Under Linux, it seems to be necessary to set the meta
+    # key explicitly; it's not enough to define the alt key.  I'm not sure
+    # why on other systems it's enough to just define the alt key -- maybe
+    # I should be defining the alt key for the other systems too.
+
+    # [2002-11-11] I've given up trying to make the world fit my preference
+    # for the meta key location.  On the Macs, it's become too hard to deal
+    # with the command key.  So now I'm using the key in-between the
+    # control and meta keys as meta.  (This is "option" on Macs, and the
+    # "Windows" key on PCs.).
+
+    xmodmap -e "keysym Super_L = Meta_L" \
+            -e "keysym Super_R = Meta_R" \
+            -e "add Mod1 = Meta_L" \
+            -e "add Mod1 = Meta_R" \
+            -e "clear Mod4"
+    breaksw
+
+case darwin*:
+    # [2002-11-11] I've given up trying to make the world fit my preference
+    # for the meta key location.  On the Macs, it's become too hard to deal
+    # with the command key.  So now I'm using the key in-between the
+    # control and meta keys as meta.  On the Mac this is the Option key,
+    # but
+    # as of XDarwin 4.2.1, it doesn't seem to have a symbol assigned so I'm
+    # calling it Alt_L.
+    # [2003-02-16] Have to set Meta_L for Emacs running inside an xterm.
+    # This is all weird, but I don't have time to debug it further.
+    # [2003-02-16] In Apple's X11, need to remap tilde and ` keys because
+    # for unfathomable reasons, the default settings are dead_tilde and
+    # dead_grave.  Ditto for '^'.
+
+    xmodmap -e "clear Mod1" \
+            -e "clear Mod2" \
+            -e "keycode 66 = Alt_L" \
+            -e "add Mod1 = Alt_L" \
+            -e "add Mod1 = Meta_L" \
+	        -e "keycode 58 = grave asciitilde" \
+		    -e "keycode 30 = 6 asciicircum" \
+		        -e "keycode 59 = Delete"
+    breaksw
+
+case irix*:
+    xset -art 25 m 6 5 b 50 3000 200
+    xmodmap -e "add Mod1 = Alt_L"
+    breaksw
+
+case sun*:
+    # Swap caps lock and control.
+    xmodmap -e "remove Lock = Caps_Lock" \
+            -e "remove Control = Control_L" \
+            -e "keysym Control_L = Caps_Lock" \
+            -e "keysym Caps_Lock = Control_L" \
+            -e "add Lock = Caps_Lock" -e "add Control = Control_L"
+    # Perform additional remappings.
+    set type = `sunkbd`
+    if ( "$type" == "Type 4 Sun keyboard" ) then
+        # Move the left-quote and ~ to where ESC is.
+        # Move ESC to the F1 key.
+        # Move \ and | to the right-quote and ~ key.
+        xmodmap -e "keycode 36 = grave asciitilde" \
+                -e "keycode 12 = Escape" \
+                -e "keycode 49 = backslash bar"
+    else if ( "$type" == "Type 5 Sun keyboard" ) then
+        # Move the | and \ to where backspace is.
+        # Move backspace to where the ` is.
+        # Make the | key also act as backspace for convenience.
+        # Move the ` and ~ to where ESC is.
+        # Move ESC to the blank key near the upper-left corner.
+        xmodmap -e "keycode 50 = backslash bar" \
+                -e "keycode 49 = BackSpace Delete" \
+                -e "keycode 95 = BackSpace Delete" \
+                -e "keycode 36 = grave asciitilde" \
+                -e "keycode 22 = Escape"
+        # Enable autorepeat for ~ in its new location, as well
+        # as for pageup and pagedown.
+        xset r 36 r 103 r 130
+    endif
+    if ( $SYSOS =~ sunos5[67] ) then
+        # There seems to be difference between Sol. 2.6 & 2.7 and previous
+        # versions of Solaris in the default assignment of the meta key.
+        # Or perhaps it's because we're running the CDE startup sequence
+        # on Solaris 2.6 and we previously used XDM.  Anyway, I need to
+        # set the meta key to be mod1.
+        # The OpenWindows server in Solaris 2.6 doesn't default this.
+        xmodmap -e "add Mod1 = Meta_L" \
+                -e "clear Mod4" 
+    endif
+    unset type
+    breaksw
+
+case aix*:
+    chhwkbd -d500 -r30 < /dev/hft
+    xset m 2 5 c 10
+    xmodmap -e "keysym BackSpace = Delete" \
+            -e "add mod1 = Alt_L" -e "add mod1 = Alt_R"
+    breaksw
+
+endsw

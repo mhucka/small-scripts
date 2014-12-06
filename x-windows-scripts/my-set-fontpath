@@ -1,0 +1,16 @@
+#!/bin/csh -f
+#
+# Description : Set up X font path
+# Author(s)   : Michael Hucka <mhucka@caltech.edu>
+# Organization: California Institute of Technology
+# Created     : 2005-07-25
+# Revision    : $Id: my-set-fontpath,v 1.1 2007/01/06 17:59:45 mhucka Exp $
+# $Source: /home/users/mhucka/cvs_roots/mhucka/bin/my-set-fontpath,v $
+
+switch ($SYSOS)
+case darwin*:
+    # [2005-07-25] Trying out True Type Fonts under Darwin.
+
+    xset fp+ /usr/X11R6/lib/X11/fonts/TTF
+    breaksw
+endsw
