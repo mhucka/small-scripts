@@ -3,6 +3,7 @@
 # @file    mac-low-power
 # @brief   Turn off inessential processes to conserve laptop battery
 # @author  Michael Hucka (mhucka@caltech.edu), Caltech
+# @license Please see the file LICENSE.md in the parent directory
 # =============================================================================
 #
 # Certain things like the bluetooth transceiver, Skype, Dropbox, and other
