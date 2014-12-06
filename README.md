@@ -1,7 +1,7 @@
 Mike's little scripts
 =====================
 
-This is a collection of short scripts, written in a variety of programming languages and for a variety of purposes.  You are welcome to use them as you see fit.  If you discover problems or can think of improvements, please me know, either using GitHub's commenting system, or a pull request, or directly via email ([mhucka@caltech.edu](mhucka@caltech.edu)).
+This is a collection of short scripts, written in a variety of programming languages and for a variety of purposes.  You are welcome to use them as you see fit.  If you discover problems or can think of improvements, please me know, either using GitHub's commenting system, or a pull request, or directly via email ([mhucka@caltech.edu](mhucka@caltech.edu)).  These scripts are distributed under MIT open-source license.
 
 
 For git
