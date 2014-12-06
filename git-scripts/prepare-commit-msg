@@ -1,0 +1,74 @@
+#!/bin/sh                                               # -*- mode: sh-mode -*-
+# =============================================================================
+# @file    prepare-commit-msg
+# @brief   Git hook for Python code
+# @author  Michael Hucka
+# @license Please see the file LICENSE.md in the parent directory
+# =============================================================================
+#
+# Purpose:
+#
+# This hook script runs pep8 on python files that are about to be committed.
+# If pep8 reports anything, the report is inserted as comments into the
+# commit message template.  This approach was the best that I could come up
+# with in order to handle the following situation: if you use an editor like
+# Emacs, and your commit message is thrown into an editing buffer, you may
+# not see messages printed on stdout or stderr by the git commit command.  By
+# putting the pep8 output into the commit message template, it helps ensure
+# you see it before committing.
+#
+# Running pep8 is not something you want to do on a commit hook, because you
+# may want to ignore pep8's warnings.  Using prepare-commit-msg, you can
+# ignore the warnings by deleting the comments from the commit message.  (But
+# of course, it's better to take the opportunity to go back and fix the issues
+# before completing the commit.)
+#
+# Usage:
+#
+# To use this script, rename it to "prepare-commit-msg", copy it to the
+# subdirectory ".git/hooks/" in your git repository, and make sure it is
+# executable.
+# =============================================================================
+
+# Configurable variables. "IGNORE" is a comma-separated list of codes to
+# be ignored. See http://pep8.readthedocs.org/en/latest/intro.html#error-codes
+# for an explanation of the codes.  The set of codes below reflects my personal
+# preferences; yours may differ, so make sure to adjust this as you see fit.
+
+IGNORE=E226,E221,E227,E241,E303,E501,E126
+
+# ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+# Body of script.  No more configuration should be necessary after this point.
+#
+# Notes about the behavior: git's prepare-commit-msg hook is called by "git
+# commit" with the name of the file that has the commit message, followed by
+# the description of the commit message's source.  The source may be empty.
+# The hook's purpose is to edit the commit message file.  If the hook fails
+# with a non-zero status, the commit is aborted.  More info is available at
+# http://git-scm.com/docs/githooks
+#
+# This script ignores the source argument and always runs, because I couldn't
+# think of a reason not to do that (so far, anyway).
+# ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+root=$(git rev-parse --show-toplevel)
+orig_msg_file="$root/$1"
+tmp_basename=/tmp/git-precommit-pep8-hook
+
+files=$(git status --porcelain | cut -c4- | grep -E '\.py$')
+if [ -n "$files" ]; then
+    msgs=$(pep8 --ignore $IGNORE $files)
+fi
+if [ -n "$msgs" ]; then
+    msg_file=$(mktemp "$tmp_basename-XXXX")
+    echo "# Warning: the following style issues were flagged by pep8:" > $msg_file
+    echo "$msgs" | sed 's/^/#	/' >> $msg_file
+    echo "# Please consider fixing the issues listed above before committing." >> $msg_file
+    echo "# If you run into a situation where pep8 flags a line but it really" >> $msg_file
+    echo "# should not, or you prefer to leave that line as-is, add the"       >> $msg_file
+    echo "# comment '# noqa' at the end of that line to make pep8 ignore it."  >> $msg_file
+    cat $orig_msg_file >> $msg_file
+    mv -f $msg_file $orig_msg_file
+fi
+
+exit 0
