@@ -34,6 +34,31 @@
 # be ignored. See http://pep8.readthedocs.org/en/latest/intro.html#error-codes
 # for an explanation of the codes.  The set of codes below reflects my personal
 # preferences; yours may differ, so make sure to adjust this as you see fit.
+#
+# Rationale for ignoring these particular codes:
+#
+#   E221: multiple spaces before operators.  This rule unfortunately causes
+#   aligned assignment statements to be flagged by `pep8`; that is, it flags
+#   the case where you align the equals `=` signs for several assignments
+#   across multiple lines.  The alignment is desirable because sometimes it
+#   helps code readability.
+#
+#   E226: missing whitespace around operators.  If this rule is left in, then
+#   `pep8` flags constructs such as `print(stuff + "-"*70)` because of the
+#   lack of spaces around the `*`.  However, adding spaces in such cases
+#   arguably makes the result _less_ easily understood.
+#
+#   E241: multiple spaces after a comma.  This again is a case where it flags
+#   situations in which you may want to align code across multiple lines for
+#   readability reasons.
+#
+#   E303: too many blank lines.  If you have more than one blank line
+#   anywhere in your file, this will cause `pep8` to flag it.  This is
+#   frankly ridiculous.  File readability is often enhanced by having more
+#   than one line between parts of a file.
+#
+#   E501: line too long.  Sometimes it makes sense to let a line be longer
+#   than 80 characters.
 
 IGNORE=E221,E226,E241,E303,E501
 
