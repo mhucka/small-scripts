@@ -35,7 +35,7 @@
 # for an explanation of the codes.  The set of codes below reflects my personal
 # preferences; yours may differ, so make sure to adjust this as you see fit.
 
-IGNORE=E226,E221,E227,E241,E303,E501,E126
+IGNORE=E221,E226,E241,E303,E501
 
 # ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 # Body of script.  No more configuration should be necessary after this point.
