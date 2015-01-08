@@ -80,7 +80,7 @@ root=$(git rev-parse --show-toplevel)
 orig_msg_file="$root/$1"
 tmp_basename=/tmp/git-precommit-pep8-hook
 
-files=$(git status --porcelain | cut -c4- | grep -E '\.py$')
+files=$(git status --porcelain --untracked-files=no | cut -c4- | grep -E '\.py$')
 if [ -n "$files" ]; then
     msgs=$(pep8 --ignore $IGNORE $files)
 fi
