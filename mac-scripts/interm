@@ -1,0 +1,84 @@
+#!/bin/sh
+# =============================================================================
+# @file    interm
+# @brief   Tell iTerm to cd to a given directory.
+# @author  Michael Hucka (mhucka@caltech.edu), Caltech
+# @license Please see the file LICENSE.md in the parent directory
+# =============================================================================
+#
+# This script is useful when you're running a shell somewhere other than
+# iTerm (as for example, in Emacs).
+
+version_number="1.0.0"
+website="https://github.com/mhucka/small-scripts/mac-scripts"
+
+print_usage() {
+cat <<EOF >&2
+Usage:
+    $program DIR [options]
+
+The [dir] is optional.  If not given, it will use the current directory
+in the shell from which this script is invoked.
+
+Options:
+    -h, --help          Print this help message and exit.
+    -v, --version       Display the current version number and exit.
+
+EOF
+    print_version
+}
+
+print_version() {
+    echo "Version: $program $version_number" 1>&2
+    echo "Author:  Mike Hucka <mhucka@caltech.edu>" 1>&2
+    echo "Website: $website" 1>&2
+}
+
+parse_args() {
+    # Parse comand-line options.
+
+    while [ $# -gt 0 ]; do
+        case $1 in
+            -h | --help )
+                print_usage
+                exit 0
+                ;;
+            -v | --version )
+                chatty=0
+                print_version
+                exit 0
+                ;;
+            *)
+                pushd $1 > /dev/null
+                dir=`/bin/pwd`
+                popd > /dev/null
+                ;;
+        esac
+        shift
+    done
+
+    if [ -z ${dir+x} ]; then
+        dir=`/bin/pwd`
+    fi
+}
+
+tell_iterm() {
+    osascript <<EOF
+tell application "iTerm"
+  activate
+  tell the current terminal
+    tell the current session
+      write text "cd $dir"
+    end tell
+  end tell
+end tell
+EOF
+}
+
+#
+# Main entry point.
+#
+
+program=${0##*/}
+parse_args "$@"
+tell_iterm
