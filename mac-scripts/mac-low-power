@@ -23,15 +23,11 @@ networksetup -setairportpower en0 off
 
 # Random programs
 killall Twitter
-killall Cobook
-killall Cloud
+killall CloudApp
 killall Skype
 killall Messages
 killall Dropbox
-killall DisplayPad
 killall "Stack Exchange Notifier"
-killall "RSS Menu"
-killall "I'm Away"
 killall Multimon
 killall PivotalBooster
 killall "Day One Reminders"
@@ -41,11 +37,13 @@ killall MouseLocatorAgent
 killall Synergy
 killall PandaBar
 killall Boom
-killall Committed
 killall PowerMate
 killall "Display Menu"
-killall "1Password 4"
+killall "1Password 5"
 killall "properVOLUME"
+killall Feeds
+killall Gitifier
+killall ExpanDrive
 # spt pause
 
 # Remind me to pause CrashPlan using the menubar utility.
