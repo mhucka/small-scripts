@@ -16,19 +16,27 @@ if [ $# -gt 1 ]; then
 fi
 
 # The sed script at the end is the dumbest way to translate numerical months
-# into proper 3-letter codes, but it saves me the time of writing a more
-# elegant script that will take 5 times as long to write and debug.
+# into proper 3-letter codes, but it saves me the trouble of writing a Python
+# script that will take 5 times as long to write and debug.
 
 bib2bib --no-comment --expand -q -oc /dev/null \
 	--remove abstract \
         --remove bibtexkey \
         --remove citation_identifier \
+        --remove date_published \
+	--remove full_text \
         --remove gca_id \
+        --remove primary_contributor_role \
+        --remove google_scholar_bibtex_export_key \
         --remove isbn \
         --remove issn \
         --remove keywords \
         --remove medium_consulted \
+        --remove miscellaneous_3 \
+        --remove misc3 \
+        --remove mypubs \
         --remove notes \
+        --remove organization \
         --remove pii \
         --remove pmcid \
         --remove publicationstatus \
@@ -37,10 +45,13 @@ bib2bib --no-comment --expand -q -oc /dev/null \
         --remove retrieval_month \
         --remove retrieval_year \
         --remove ris_reference_number \
+        --remove secondary_title \
         --remove sentelink \
+        --remove sente_internal_pdf_cover_page_counts_by_attachment_uuid \
         --remove tags \
         --remove us_nlm_id \
         --remove uuid \
+        --remove web_of_knowledge_record_id \
         --remove web_data_source \
          $1 \
  | sed -e 's/month = {1}/month = jan/g;s/month = {2}/month = feb/g;s/month = {3}/month = mar/g;s/month = {4}/month = apr/g;s/month = {5}/month = may/g;s/month = {6}/month = jun/g;s/month = {7}/month = jul/g;s/month = {8}/month = aug/g;s/month = {9}/month = sep/g;s/month = {10}/month = oct/g;s/month = {11}/month = nov/g;s/month = {12}/month = dec/g'
