@@ -10,6 +10,12 @@ This is a collection of short scripts, written in a variety of programming langu
 This subdirectory contains scripts such as pre-commit hooks for use with git.
 
 
+[sente-scripts](https://github.com/mhucka/small-scripts/tree/master/sente-scripts)
+-------
+
+This subdirectory constains scripts useful with [Sente](http://www.thirdstreetsoftware.com/site/Sente.html), an excellent reference manager for the Mac.
+
+
 [svn-scripts](https://github.com/mhucka/small-scripts/tree/master/svn-scripts)
 -------
 
