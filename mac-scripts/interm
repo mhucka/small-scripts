@@ -66,9 +66,9 @@ tell_iterm() {
     osascript <<EOF
 tell application "iTerm"
   activate
-  tell the current terminal
+  tell the current window
     tell the current session
-      write text "cd $dir"
+      write text "cd \"$dir\""
     end tell
   end tell
 end tell
