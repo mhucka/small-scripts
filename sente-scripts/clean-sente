@@ -20,7 +20,7 @@ fi
 # script that will take 5 times as long to write and debug.
 
 tmpfile=$(mktemp "/tmp/clean-sente-XXXX")
-sed '/full_text/d' $1 | tr -cd "[:print:]\\n\\t\\r" | tr -d '\014-\016' | tr '\240' ' ' | perl -pi -e 's/[[:^ascii:]]/ /g' > $tmpfile
+sed '/full_text/d' $1 | tr -cd "[:print:]\\n\\t\\r" | tr -d '\014-\016' | tr '\240' ' ' | perl -p -e 's/[[:^ascii:]]/ /g' > $tmpfile
 bib2bib --no-comment --expand -q -oc /dev/null \
 	--remove abstract \
         --remove bibtexkey \
@@ -48,13 +48,16 @@ bib2bib --no-comment --expand -q -oc /dev/null \
         --remove retrieval_year \
         --remove ris_reference_number \
         --remove secondary_title \
-        --remove sentelink \
         --remove sente_internal_pdf_cover_page_counts_by_attachment_uuid \
-        --remove tags \
         --remove us_nlm_id \
         --remove uuid \
         --remove web_of_knowledge_record_id \
         --remove web_data_source \
          $tmpfile \
- | sed -e 's/month = {1}/month = jan/g;s/month = {2}/month = feb/g;s/month = {3}/month = mar/g;s/month = {4}/month = apr/g;s/month = {5}/month = may/g;s/month = {6}/month = jun/g;s/month = {7}/month = jul/g;s/month = {8}/month = aug/g;s/month = {9}/month = sep/g;s/month = {10}/month = oct/g;s/month = {11}/month = nov/g;s/month = {12}/month = dec/g'
+ |\
+sed -e 's/month = {1}/month = jan/g;s/month = {2}/month = feb/g;s/month = {3}/month = mar/g;s/month = {4}/month = apr/g;s/month = {5}/month = may/g;s/month = {6}/month = jun/g;s/month = {7}/month = jul/g;s/month = {8}/month = aug/g;s/month = {9}/month = sep/g;s/month = {10}/month = oct/g;s/month = {11}/month = nov/g;s/month = {12}/month = dec/g' |\
+egrep -v 'sentelink = {({?http|%|sync|ftp|sente)' |\
+sed -e 's/\\o/{\\o}/g;s/\\ss/{\\ss}/g;s/\\ae/{\\ae}/g'
+
+# Clean up.
 /bin/rm -f $tmpfile
