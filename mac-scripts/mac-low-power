@@ -44,6 +44,8 @@ killall "properVOLUME"
 killall Feeds
 killall Gitifier
 killall ExpanDrive
+killall Buffer
+killall "Audio Hijack 3 Schedule Helper"
 # spt pause
 
 # Remind me to pause CrashPlan using the menubar utility.
