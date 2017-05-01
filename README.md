@@ -9,11 +9,14 @@ This is a collection of short scripts, written in a variety of programming langu
 
 *Repository*:   [https://github.com/mhucka/small-scripts](https://github.com/mhucka/small-scripts)
 
--------
+----
+
 
 [devonthink-scripts](https://github.com/mhucka/small-scripts/tree/master/devonthink-scripts)
+-------
 
 This subdirectory constains scripts useful with [DEVONthink](http://www.devontechnologies.com), a powerful personal database system the Mac.
+
 
 [sente-scripts](https://github.com/mhucka/small-scripts/tree/master/sente-scripts)
 -------
