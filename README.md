@@ -11,11 +11,9 @@ This is a collection of short scripts, written in a variety of programming langu
 
 -------
 
-[git-scripts](https://github.com/mhucka/small-scripts/tree/master/git-scripts)
--------
+[devonthink-scripts](https://github.com/mhucka/small-scripts/tree/master/devonthink-scripts)
 
-This subdirectory contains scripts such as pre-commit hooks for use with git.
-
+This subdirectory constains scripts useful with [DEVONthink](http://www.devontechnologies.com), a powerful personal database system the Mac.
 
 [sente-scripts](https://github.com/mhucka/small-scripts/tree/master/sente-scripts)
 -------
@@ -23,16 +21,22 @@ This subdirectory contains scripts such as pre-commit hooks for use with git.
 This subdirectory constains scripts useful with [Sente](http://www.thirdstreetsoftware.com/site/Sente.html), an excellent reference manager for the Mac.
 
 
-[svn-scripts](https://github.com/mhucka/small-scripts/tree/master/svn-scripts)
--------
-
-This subdirectory constains scripts useful with Subversion.
-
-
 [mac-scripts](https://github.com/mhucka/small-scripts/tree/master/mac-scripts)
 ------------
 
 This subdirectory constains scripts useful on Mac OS X systems.
+
+
+[git-scripts](https://github.com/mhucka/small-scripts/tree/master/git-scripts)
+-------
+
+This subdirectory contains scripts such as pre-commit hooks for use with git.
+
+
+[svn-scripts](https://github.com/mhucka/small-scripts/tree/master/svn-scripts)
+-------
+
+This subdirectory constains scripts useful with Subversion.
 
 
 [x-windows-scripts](https://github.com/mhucka/small-scripts/tree/master/x-windows-scripts)
