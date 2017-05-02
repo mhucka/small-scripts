@@ -15,7 +15,15 @@ This is a collection of short scripts, written in a variety of programming langu
 [devonthink-scripts](https://github.com/mhucka/small-scripts/tree/master/devonthink-scripts)
 -------
 
-This subdirectory constains scripts useful with [DEVONthink](http://www.devontechnologies.com), a powerful personal database system the Mac.
+This subdirectory constains scripts useful with [DEVONthink](http://www.devontechnologies.com), a powerful personal database system for the Mac.
+
+
+-------
+
+[omnioutliner-scripts](https://github.com/mhucka/small-scripts/tree/master/omnioutliner-scripts)
+-------
+
+This subdirectory constains scripts useful with [OmniOutliner](http://www.omnigroup.com), an outline-oriented editor for the Mac.
 
 
 [sente-scripts](https://github.com/mhucka/small-scripts/tree/master/sente-scripts)
