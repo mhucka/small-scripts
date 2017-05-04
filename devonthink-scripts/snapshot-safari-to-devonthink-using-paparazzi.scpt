@@ -41,9 +41,18 @@ tell application "Paparazzi!"
 	close front window
 end tell
 
-tell application id "DNtp"
-	activate
-	set theRecord to import destinationFile name theTitle
-	-- this fails with a finder error and I can't figure out why. leaving it for now. 2017-04-29.
-	-- if exists theRecord then tell application "Finder" to delete file destinationFile
+tell application "System Events"
+	if exists file destinationFile then
+		tell application id "DNtp"
+			activate
+			set theRecord to import destinationFile name theTitle
+			-- this fails with a finder error and I can't figure out why. leaving it for now. 2017-04-29.
+			-- if exists theRecord then tell application "Finder" to delete file destinationFile
+		end tell
+	else
+		display alert "Paparazzi failed to produce a file"
+		activate application "Paparazzi!"
+	end if
 end tell
+
+
