@@ -18,8 +18,6 @@ This is a collection of short scripts, written in a variety of programming langu
 This subdirectory constains scripts useful with [DEVONthink](http://www.devontechnologies.com), a powerful personal database system for the Mac.
 
 
--------
-
 [omnioutliner-scripts](https://github.com/mhucka/small-scripts/tree/master/omnioutliner-scripts)
 -------
 
