@@ -10,3 +10,9 @@ defaults -currentHost write com.apple.notificationcenterui doNotDisturb -bool FA
 defaults -currentHost delete com.apple.notificationcenterui doNotDisturbDate
 osascript -e 'quit application "Notification Center"'
 killall usernoted
+
+# When this script is executed from Quicksilver, Terminal doesn't close its
+# window for some reason, even if you configure Terminal to turn off the
+# "restore text" feature (in the Profile -> Window tab) and set the "when the
+# shell exits" to "close the window" (in the Profile -> Shell tab).  So:
+osascript -e 'tell application "Terminal" to quit'
