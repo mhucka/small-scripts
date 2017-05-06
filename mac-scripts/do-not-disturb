@@ -1,0 +1,19 @@
+#!/bin/sh -x
+
+killall usernoted
+killall GyazMail
+killall Slack
+open "/Applications/SelfControl.app"
+
+# Turn off Apple notifications.
+# The following is from an answer by Jacques Rioux in an Apple discussion forum:
+# https://discussions.apple.com/thread/7520296?start=0&tstart=0
+
+now=$(date -u "+%Y-%m-%dT%TZ")
+defaults -currentHost write com.apple.notificationcenterui doNotDisturb -bool TRUE
+defaults -currentHost write com.apple.notificationcenterui doNotDisturbDate -date "$now"
+osascript -e 'quit application "Notification Center"'
+
+# Remind me to turn off notifications on my phone too.
+
+osascript -e 'tell app "System Events" to display dialog  "Put phone on Do Not Disturb"'
