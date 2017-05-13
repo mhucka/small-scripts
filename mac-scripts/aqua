@@ -5,18 +5,15 @@
 # from Quicksilver fails to set the full environment, particularly the
 # environment variables I normally set in shells.
 #
-# To make this work, additional settings must be made to Terminal.  The hard
-# part is making Terminal close its windows after it starts up, and not
-# create new windows every time this script is executed.  It turns out that
-# configuring Terminal to turn off the "restore text" feature (in the Profile
-# -> Window tab) and to set the "when the shell exits" to "close the window"
-# (in the Profile -> Shell tab) is not enough to make Terminal close its
-# window after starting up the Aquamacs process.  I found it's also necessary
+# It is annoyingly hard to make Terminal close its windows after it starts
+# up, and also not create new windows every time this script is executed.  It
+# turns out that configuring Terminal to turn off the "restore text" feature
+# (in the Profile -> Window tab) and to set the "when the shell exits" to
+# "close the window" (in the Profile -> Shell tab) is *not* enough to make
+# Terminal close its window after this script is executed.  Nor is it enough
 # to issue this command in a shell:
-#
-#   defaults write com.apple.Terminal NSQuitAlwaysKeepsWindows -bool false
-#
-# This solved the problem for me on macOS 10.12.
+#     defaults write com.apple.Terminal NSQuitAlwaysKeepsWindows -bool false
+# I finally added an explicit command via osascript to tell Terminal to quit.
 
 rm -f ~/Library/Application\ Support/Aquamacs\ Emacs/tramp
 nohup open /Applications/Aquamacs\ 2.4/Aquamacs.app 
