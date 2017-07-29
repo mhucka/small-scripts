@@ -9,15 +9,15 @@
 # This script is useful when you're running a shell somewhere other than
 # iTerm (as for example, in Emacs).
 
-version_number="1.0.0"
+version_number="1.0.1"
 website="https://github.com/mhucka/small-scripts/mac-scripts"
 
 print_usage() {
 cat <<EOF >&2
 Usage:
-    $program DIR [options]
+    $program [DIR] [options]
 
-The [dir] is optional.  If not given, it will use the current directory
+The [DIR] is optional.  If not given, it will use the current directory
 in the shell from which this script is invoked.
 
 Options:
