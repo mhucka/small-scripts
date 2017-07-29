@@ -19,10 +19,10 @@ website="https://github.com/mhucka/small-scripts/mac-scripts"
 print_usage() {
 cat <<EOF >&2
 Usage:
-    $program [FILE-OR-DIR] [options]
+    $program [options]
 
-The [FILE-OR-DIR] is optional.  If not given, it will use the current
-directory in the shell from which this script is invoked.
+This takes no arguments.  When invoked, it tells Safari to reload whatever
+is currently in its front-most tab or window.
 
 Options:
     -h, --help          Print this help message and exit.
