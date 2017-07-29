@@ -1,0 +1,83 @@
+#!/bin/sh
+# =============================================================================
+# @file    reload-safari
+# @brief   Tell Safari to refresh the current tab
+# @author  Michael Hucka (mhucka@caltech.edu), Caltech
+# @license Please see the file LICENSE.md in the parent directory
+# =============================================================================
+#
+# This reloads whatever is in Safari's front-most window or tab but doesn't
+# switch focus to it.  This script is useful when used in conjunction with
+# something like 'entr' or 'fswatch' to watch a file or directory.
+#
+# JavaScript code originally from
+# https://discussions.apple.com/message/24389284#24389284
+
+version_number="1.0.0"
+website="https://github.com/mhucka/small-scripts/mac-scripts"
+
+print_usage() {
+cat <<EOF >&2
+Usage:
+    $program [FILE-OR-DIR] [options]
+
+The [FILE-OR-DIR] is optional.  If not given, it will use the current
+directory in the shell from which this script is invoked.
+
+Options:
+    -h, --help          Print this help message and exit.
+    -v, --version       Display the current version number and exit.
+
+EOF
+    print_version
+}
+
+print_version() {
+    echo "Version: $program $version_number" 1>&2
+    echo "Author:  Mike Hucka <mhucka@caltech.edu>" 1>&2
+    echo "Website: $website" 1>&2
+}
+
+parse_args() {
+    # Parse comand-line options.
+
+    while [ $# -gt 0 ]; do
+        case $1 in
+            -h | --help )
+                print_usage
+                exit 0
+                ;;
+            -v | --version )
+                chatty=0
+                print_version
+                exit 0
+                ;;
+            *)
+                print_usage
+                exit 0
+                ;;
+        esac
+        shift
+    done
+}
+
+
+
+reload_safari() {
+    osascript <<EOF
+tell application "Safari"
+    tell window 1
+        do JavaScript "window.location.reload(true)" in current tab
+    end tell
+end tell
+EOF
+}
+
+#
+# Main entry point.
+#
+
+program=${0##*/}
+parse_args "$@"
+reload_safari
+
