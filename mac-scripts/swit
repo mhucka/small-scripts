@@ -1,15 +1,16 @@
 #!/bin/sh
 # =============================================================================
-# @file    interm
+# @file    swit
 # @brief   Tell iTerm to cd to a given directory.
 # @author  Michael Hucka (mhucka@caltech.edu), Caltech
 # @license Please see the file LICENSE.md in the parent directory
 # =============================================================================
 #
 # This script is useful when you're running a shell somewhere other than
-# iTerm (as for example, in Emacs).
+# iTerm (as for example, in Emacs) and then want to switch to iTerm in that
+# same directory.
 
-version_number="1.0.1"
+version_number="1.0.2"
 website="https://github.com/mhucka/small-scripts/mac-scripts"
 
 print_usage() {
