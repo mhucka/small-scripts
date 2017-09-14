@@ -1,1 +1,40 @@
+# -*- mode: gitignore; -*-
+# =============================================================================
+# First author: Michael Hucka <mhucka@caltech.edu>
+# Organization: California Institute of Technology
+# Portions of this were taken from https://www.gitignore.io on 2017-09-14.
+# =============================================================================
+
+# General Mac-specific things to ignore:
+# .............................................................................
+
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# General Emacs-specific things to ignore:
+# .............................................................................
+
 *~
+.\#*
+.git/COMMIT_EDITMSG
+/auto/
