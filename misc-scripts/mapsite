@@ -1,0 +1,106 @@
+#!/bin/bash
+# =============================================================================
+# @file    mapsite
+# @brief   Generate a sitemap starting from a URL
+# @author  Michael Hucka <mhucka@caltech.edu>
+# @license Please see the file named LICENSE in the project directory
+# =============================================================================
+
+version_number="1.0.0"
+website="https://github.com/mhucka/small-scripts"
+
+# Body of script.  No more configuration should be necessary after this point.
+# .............................................................................
+
+# Default variable values.
+
+program=${0##*/}
+args_given="$*"
+exit_code=0
+fast=false
+unique=false
+site=
+action=
+
+# Helper functions.
+
+print_usage() {
+cat <<EOF >&2
+Usage:
+    $program [options] URL
+
+This generates a sitemap starting with a given URL.  It uses 'wget' to do the
+work.  By default, it uses a variable delay between remote accesses to reduce
+impact on the remote server; use option '-f' to turn that off, but beware you
+risk getting automatically blacklisted by the remote site.
+
+If given '-u', this will attempt to print only unique URLs.  Note that the
+processing for this takes place at the end of a streaming pipe, so there is a
+chance that the set of URLs will not be completely unique.
+
+Options:
+    -f, --fast      Don't use a delay between fetches
+    -h, --help      Print this help message and exit
+    -u, --unique    Print only unique URLs
+    -v, --version   Display the current version number and exit
+
+EOF
+    print_version
+}
+
+print_version() {
+    printf '%s\n' "$program version $version_number" 1>&2
+    printf '%s\n' "Author:  Mike Hucka <mhucka@caltech.edu>" 1>&2
+    printf '%s\n' "Website: $website" 1>&2
+}
+
+parse_args() {
+    # Parse comand-line options.
+
+    while (( $# > 0 )); do
+        case $1 in
+            -f | --fast )
+                fast=true
+                ;;
+            -h | --help )
+                print_usage
+                exit 0
+                ;;
+            -u | --unique )
+                unique=true
+                ;;
+            -v | --version )
+                print_version
+                exit 0
+                ;;
+            *)
+                site=$1
+                ;;
+        esac
+        shift
+    done
+}
+
+generate_sitemap() {
+    base_args="--no-cookies --ignore-length --spider -nd --delete-after"
+    delay="-w 1 --random-wait"
+    uniquify="cat"   # No-op. I tried ":" but it didn't seem to work.
+
+    if $fast; then
+        delay=
+    fi
+    if $unique; then
+        uniquify="uniq"
+    fi
+
+    wget $delay $base_args -r ${site} 2>&1 \
+        | egrep --line-buffered '^--' \
+        | awk '{print $3; fflush()}' \
+        | gsed -u -e 's,/$,,' \
+        | $uniquify
+}
+
+# Main entry point.
+
+parse_args "$@"
+generate_sitemap
