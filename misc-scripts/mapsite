@@ -6,7 +6,7 @@
 # @license Please see the file named LICENSE in the project directory
 # =============================================================================
 
-version_number="1.0.0"
+version_number="1.0.1"
 website="https://github.com/mhucka/small-scripts"
 
 # Body of script.  No more configuration should be necessary after this point.
@@ -30,19 +30,21 @@ Usage:
     $program [options] URL
 
 This generates a sitemap starting with a given URL.  It uses 'wget' to do the
-work.  By default, it uses a variable delay between remote accesses to reduce
-impact on the remote server; use option '-f' to turn that off, but beware you
-risk getting automatically blacklisted by the remote site.
+work, using the options to make 'wget' spider a site recursively from a given
+URL down (not following parent links).  The output is produced on stdout.
+
+By default, $program uses a variable delay between remote accesses to reduce
+impact on the remote server; use option '-f' to turn off the delay.
 
 If given '-u', this will attempt to print only unique URLs.  Note that the
 processing for this takes place at the end of a streaming pipe, so there is a
 chance that the set of URLs will not be completely unique.
 
 Options:
-    -f, --fast      Don't use a delay between fetches
-    -h, --help      Print this help message and exit
-    -u, --unique    Print only unique URLs
-    -v, --version   Display the current version number and exit
+    -f, --fast         Don't use a delay between fetches
+    -h, --help         Print this help message and exit
+    -u, --unique       Print only unique URLs
+    -v, --version      Display the current version number and exit
 
 EOF
     print_version
@@ -82,9 +84,9 @@ parse_args() {
 }
 
 generate_sitemap() {
-    base_args="--no-cookies --ignore-length --spider -nd --delete-after"
+    base_args="--ignore-length -e robots=off --spider --recursive --no-parent -nd --delete-after"
     delay="-w 1 --random-wait"
-    uniquify="cat"   # No-op. I tried ":" but it didn't seem to work.
+    uniquify="cat"   # Default is no-op. I tried ":" but it didn't work.
 
     if $fast; then
         delay=
@@ -93,7 +95,7 @@ generate_sitemap() {
         uniquify="uniq"
     fi
 
-    wget $delay $base_args -r ${site} 2>&1 \
+    wget $base_args $delay -r ${site} 2>&1 \
         | egrep --line-buffered '^--' \
         | awk '{print $3; fflush()}' \
         | gsed -u -e 's,/$,,' \
