@@ -6,7 +6,7 @@
 # @license Please see the file named LICENSE in the project directory
 # =============================================================================
 
-version_number="1.0.1"
+version_number="1.1.0"
 website="https://github.com/mhucka/small-scripts"
 
 # Body of script.  No more configuration should be necessary after this point.
@@ -17,8 +17,12 @@ website="https://github.com/mhucka/small-scripts"
 program=${0##*/}
 args_given="$*"
 exit_code=0
-fast=false
-unique=false
+fast=true
+acc_suffixes=
+acc_regex=
+rej_suffixes=
+rej_regex=
+types=
 site=
 action=
 
@@ -33,18 +37,42 @@ This generates a sitemap starting with a given URL.  It uses 'wget' to do the
 work, using the options to make 'wget' spider a site recursively from a given
 URL down (not following parent links).  The output is produced on stdout.
 
-By default, $program uses a variable delay between remote accesses to reduce
-impact on the remote server; use option '-f' to turn off the delay.
+If the remote site is known or suspected of being certain common types of
+systems, the convenient '-t' option lets you to tell $program to add some
+predefined filters to avoid following low-meaning URLs.  Currently, the
+available types are:
 
-If given '-u', this will attempt to print only unique URLs.  Note that the
-processing for this takes place at the end of a streaming pipe, so there is a
-chance that the set of URLs will not be completely unique.
+  mediawiki  -- skip MediaWiki-specific URLs like diff pages
+
+If given '-a' or -'r', it will pass the argument values to the wget options
+'--accept' and '--reject', respectively, making wget accept and reject file
+name suffixes accordingly.  Make sure to enclose the argument values in
+quotes to prevent the shell from interpreting them.  Example: -a '*.pdf'.
+
+If given '-A' or '-R', it will pass the argument values to the wget options
+'--accept-regex' and '--reject-regex', respectively, making wget accept and
+reject entire URLs based on the given regular expressions.
+
+Note: combining '-t' with the '-a'/'-r' etc. options is not recommended, as
+the resulting behavior is difficult to predict.
+
+If given '-w', $program will add a variable delay between remote accesses to
+reduce impact on the remote server.  This is generally a nice thing to do.
+
+Helpful tip: unless there is a reason not to, add a trailing '/' to the URL
+in order to make wget less likely to ascend into the parent of the URL.
+Without the '/', wget has a tendency to go beyond the given site (despite
+that $program gives it the --no-parent option).
 
 Options:
-    -f, --fast         Don't use a delay between fetches
-    -h, --help         Print this help message and exit
-    -u, --unique       Print only unique URLs
-    -v, --version      Display the current version number and exit
+  -a, --accept "SUFFIX,..."    Comma-separated list of file suffixes to accept
+  -A, --accept-regex "REGEXP"  Regular expression to accept the complete URL
+  -h, --help                   Print this help message and exit
+  -r, --reject "SUFFIX,..."    Comma-separated list of file suffixes to accept
+  -R, --reject-regex "REGEXP"  Regular expression to accept the complete URL
+  -t, --type TYPE              Use predefined filters for known site types
+  -v, --version                Display the current version number and exit
+  -w, --wait                   Be nice and wait ~1 s between server accesses
 
 EOF
     print_version
@@ -61,19 +89,36 @@ parse_args() {
 
     while (( $# > 0 )); do
         case $1 in
-            -f | --fast )
-                fast=true
+            -a | --accept )
+                shift
+                acc_suffixes="$1"
+                ;;
+            -A | --accept-regex )
+                shift
+                acc_regex="$1"
                 ;;
             -h | --help )
                 print_usage
                 exit 0
                 ;;
-            -u | --unique )
-                unique=true
+            -r | --reject )
+                shift
+                rej_suffixes="$1"
+                ;;
+            -R | --reject-regex )
+                shift
+                rej_regex="$1"
+                ;;
+            -t | --type )
+                shift
+                types=$types\ "$1"
                 ;;
             -v | --version )
                 print_version
                 exit 0
+                ;;
+            -w | --wait )
+                fast=false
                 ;;
             *)
                 site=$1
@@ -84,22 +129,52 @@ parse_args() {
 }
 
 generate_sitemap() {
-    base_args="--ignore-length -e robots=off --spider --recursive --no-parent -nd --delete-after"
+    # Run wget with appropriate arguments.
+
+    # I had trouble getting quoting to work out properly, and finally hit on
+    # the idea of turning off shell wildcard expansion completely:
+    set -f
+
+    # Set basic arguments.
+
+    base_args=" --spider -p -r -np -nd --delete-after -e robots=off --no-cookies --content-on-error"
+    header_args="--header='Accept-Encoding: none'"
     delay="-w 1 --random-wait"
-    uniquify="cat"   # Default is no-op. I tried ":" but it didn't work.
+    accept_reject=
+
+    # Add options based on user choices.
 
     if $fast; then
         delay=
     fi
-    if $unique; then
-        uniquify="uniq"
+    if [[ -n $acc_suffixes ]]; then
+        accept_reject="--accept $acc_suffixes"
+    fi
+    if [[ -n $acc_regex ]]; then
+        accept_reject=$accept_reject\ "--accept-regex $acc_regex"
+    fi
+    if [[ -n $rej_suffixes ]]; then
+        accept_reject=$accept_reject\ "--reject $rej_suffixes"
+    fi
+    if [[ -n $rej_regex ]]; then
+        accept_reject=$accept_reject\ "--reject-regex $rej_regex"
+    fi
+    if [[ -n $types ]]; then
+        if [[ $types =~ mediawiki ]]; then
+            # Don't filter out title=Special, as that frequently leads to
+            # more pages that have content worth noting.
+            mediawiki="(.*)(&oldid=|&action=|&limit=|&from=|&days=|&printable=yes|&hide|UserLogin&returnto=)(.*)"
+            accept_reject=$accept_reject\ "--reject-regex $mediawiki"
+        fi
     fi
 
-    wget $base_args $delay -r ${site} 2>&1 \
+    # And away we go.
+
+    wget $base_args $header_args $delay $accept_reject -r ${site} 2>&1 \
         | egrep --line-buffered '^--' \
-        | awk '{print $3; fflush()}' \
+        | gawk '{print $3; fflush()}' \
         | gsed -u -e 's,/$,,' \
-        | $uniquify
+        | gstdbuf -oL uniq
 }
 
 # Main entry point.
