@@ -1,0 +1,18 @@
+#!/bin/bash
+# Configure up a git repo to handle AppleScript files.
+
+if [[ ! -d .git ]]; then
+    echo "This directory does not appear to be the top level of a git repo."
+    exit 1
+fi
+
+git config diff.scpt.binary "true"
+git config diff.scpt.textconv "osadecompile"
+
+git config filter.ascr.smudge "git-ascr-filter --smudge %f"
+git config filter.ascr.clean "git-ascr-filter --clean %f"
+
+cat >> .gitattributes <<"EOF"
+*.scpt diff=scpt
+*.scpt filter=ascr
+EOF
