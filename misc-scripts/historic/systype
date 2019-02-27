@@ -1,0 +1,115 @@
+#!/bin/csh -f
+#
+# $Source: /home/users/mhucka/cvs_roots/mhucka/bin/systype,v $
+# $Id: systype,v 1.1 2007/06/25 02:24:23 mhucka Exp $
+#  
+# Description       : Attempt to figure out system type & echo OS + arch
+# Original author(s): Michael Hucka <hucka@eecs.umich.edu>
+# Organization      : University of Michigan EECS, Ann Arbor, Mich., USA
+#
+# Copyright (C) 1995-1998 The Regents of the University of Michigan.
+#
+# This program is free software.  It may be freely copied and distributed.
+# It is provided as-is, without any representation from the University of
+# Michigan or the author as to its fitness for any purpose, and without
+# warranty by The University of Michigan or the author, of any kind.
+
+# This script prints two strings on stdout.  The first string indicates
+# the operating system type; the second string indicates the machine
+# architecture.  The identifiers used are based roughly on the output
+# of the "uname" command.  Uname itself is used to generate the strings,
+# if possible, and if uname is not found, some heuristics are used instead.
+
+# Some common values:
+
+#  Vendor       OS                   		Architecture
+#  ------       ----------------------------	-----------------------------
+#   Sun         sunos41, sunos551, sunos56	sun4, sun4c, sun4m
+#   SGI 	irix53, irix62			mips
+
+set path = (/usr/gnu/bin /usr/ucb /usr/sbin /sbin /usr/local/bin $path)
+
+if ( { ( uname >& /dev/null ) } ) then
+    # It would be more efficient to invoke "uname -a" only once here and
+    # parse the result ourselves, but uname on different OSs returns
+    # different numbers of fields in the "uname -a" output.
+
+    set os_base = `uname -s | tr 'A-Z' 'a-z'`
+    set os_rev  = `uname -r | cut -f1-2 -d'.' | sed -e 's/\.//g'`
+    set arch    = `uname -m`
+    
+    if ( $os_base =~ solaris*) set os_base = sunos
+    if ( $os_base =~ irix* && $arch =~ IP* ) set arch = mips
+
+    echo "${os_base}${os_rev} ${arch}"
+    exit 0
+# else
+#     # Argh.  Have to use some ugly heuristics.
+#     foreach i ( sun4 sun4c sun4m sparc 4d sun3 sun3x sun386 vax pdp11 u3b u3b2 \
+#                 hp9000s200 hp9000s300 hp9000s400 hp9000s500 hp9000s700 \
+#                 hp9000s700_8MB hp9000s800)
+#         if ( -e /bin/$i && { /bin/$i } ) then
+#             switch ( $i )
+#             case sun*:
+#             case sparc*:
+#                 set arch = $i
+#                 if ( $?haveuname ) then
+#                     set v = `uname -r | sed -e 's/\.//g' -e 's/\([0-9]*\)_.*/\1/'`
+#                 else            # Can't find uname; try motd.
+#                     set v = `grep SunOS /etc/motd | sed -e 's/SunOS[ \t]*[Rr]elease[ \t]*\([0-9]\.[0-9]\(\.[0-9]\)?\).*/\1/' -e 's/\.//g'`
+#                 endif
+#                 echo ${arch}_$v
+#                 exit 0
+#             case 4d:
+#                 set arch = sgi
+#                 if ( $?haveuname ) then
+#                     set v = `uname -r | sed -e 's/\.//g' -e 's/\([0-9]*\)_.*/\1/'`
+# 		else		# Can't find uname; punt.
+# 		    set v = 53
+#                 endif
+#                 echo ${arch}_$v
+#                 exit 0
+#             case hp*:
+#                 set arch = `echo $i | sed -e 's/hp9000s\(.*\)/\1/'`
+#                 if ( $?haveuname ) then
+#                     set v = `uname -r | sed -e 's/\.//g' -e 's/A0\(.*\)1/\1/'`
+#                 else            # Punt.  Call it release 9.0.
+#                     set v = 90
+#                 endif
+#                 echo hp${arch}_ux$v
+#                 exit 0
+#             default:
+#                 echo $i
+#                 exit 0
+#             endsw
+#        endif
+#     end 
+#     # Cases for Ultrix machines.
+#     if ( -e /ultrixboot && -e /vmunix ) then
+#         if ( -e /bin/machine ) then
+#             set arch = `/bin/machine`
+#             if ( $arch == mips ) set arch = pmax
+#         else if ( $?haveuname ) then
+#             set m = `uname -m`
+#             if ( $m == RISC )
+#                 set arch = pmax
+#             else
+#                 set arch = $m
+#             endif
+#         else
+#             set arch = pdp
+#         endif
+#         if ( $?haveuname ) then
+#             set v = `uname -r | sed -e 's/\.//g'`
+#         else
+#             set v = `grep Ultrix /etc/motd | sed -e 's/Ultrix[ \t]*\([^ \t]*\).*/\1/' -e 's/\.//g'`
+#         endif
+#         echo ${arch}_ul$v
+#         exit 0  
+#     endif
+endif
+
+# Can't figure it out, so say so:
+#
+echo "unknown unknown"
+exit 1

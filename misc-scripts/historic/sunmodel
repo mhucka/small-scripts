@@ -1,0 +1,459 @@
+#!/bin/sh
+#
+#
+# Parse output from devinfo/prtconf
+#  and display the kind of Sun and its clock 
+# frequency.
+#
+# Jan Wortelboer  (janw@fwi.uva.nl) 
+# idea from Chris Metcalf, metcalf@lcs.mit.edu
+# version 1.6.1 6 April 1994
+# changed trying to adjust to SPARCstation 20 and SPARCstation 5
+# version 1.7     01 June 1994 added FrameBuffer
+# version 1.8     08 June 1994 690 corrected
+# version 1.9     20 januari 1995 TGX-PLUS added
+# version 1.99    24 februari 1995 More GX specs
+# version 1.999   24 may 1995 TCX trial, i am not happy with it.
+# version 1.9999  04 august 1995 support for Ross,RT625
+# version 2.0000  10 oktober 1995 egrep removed, expr was to large for sunos.
+#                    added memory size
+# version 2.0001  17 januari 1996 added support for ultra.
+# version 2.0002  01 march 1996 added support for Ross,RT625 without cpuF
+# version 2.0003  01 may 1996 added support for Ross,CY605 without cpuF
+# version 3.0000  01 juli 1997 added support bootprom
+# version 3.0001  18 sept 1998 typo found by John Murphy (murf)
+# version 3.0002  27 jan 1999  Dubble typo Double
+# version 3.0003  16 march 1999  M64/FFB/AFB FB support
+version=`uname -r`
+hostje=`uname -n`
+name=
+bname=
+freq=0
+cpus=0
+cpu= 
+cpuc= 
+cpuf=0
+memsize=
+name_freq=0
+fb=
+dblbuf=0
+vmsize=0
+depth=0
+height=0
+width=0
+hfreq=0
+vfreq=0
+fbmapped=0
+emulation=""
+montype=""
+pr_name=
+eeprom=
+print_eeprom=0
+num_args=$#
+fbext="\'cgthree\'|\'cgsix\'|\'cgtwelve\'|501-2325|501-1672|501-2253|SUNW,tcx"
+fmext="montype|hfreq|vfreq|dblbuf|vmsize|depth|height|width|fbmapped|vram|tcx-8-bit|tcx-24-bit"
+not="nvramrc|blit-width"
+
+hex_to_decm()
+{
+	f=`hex_to_dec $1`
+	f=`expr $f \/ 100000 | sed 's/\(.*\)\(.\)/\1.\2/'`
+	echo $f
+}
+
+hex_to_deck()
+{
+	f=`hex_to_dec $1`
+	f=`expr $f \/ 100 | sed 's/\(.*\)\(.\)/\1.\2/'`
+	echo $f
+}
+
+hex_to_dec()
+{
+	hf=`echo $1 | tr '[a-z]' '[A-Z]'`
+	f=` ( echo "ibase=16" ; echo $hf ) | bc`
+	echo $f
+}
+
+fbuf_calc()
+{
+if [ ${hfreq} -eq 0 -o ${vfreq} -eq 0 ]
+then
+	if [ ${vfreq} -gt 0 ]
+	then	
+		sfreq="-${vfreq}Hz"
+	else	
+		sfreq=
+	fi
+else
+	sfreq=@${hfreq}kHz-${vfreq}Hz
+fi
+if [ ${dblbuf} -gt 0 -a ${fbmapped} -gt 0 ]
+then
+	sdb="(Double Buffered)"
+else
+	sdb=
+fi
+if [ ${width} -gt 0 -a ${height} -gt 0 ]
+then
+	if [ ${depth} -gt 0 ]
+	then
+		sfmt=${width}x${height}x${depth}
+	else
+		sfmt=${width}x${height}
+	fi
+else
+	sfmt=
+fi
+if [ ${vmsize} -gt 0 ]
+then
+	svm=${vmsize}MB
+else
+	svm=
+fi
+if [ "" != "${montype}" ]
+then
+	smon=Mon${montype}
+else
+	smon=
+fi
+echo  ${svm}${sdb} ${smon} ${sfmt}${sfreq}
+
+dblbuf=0
+vmsize=0
+depth=0
+height=0
+width=0
+fbmapped=0
+hfreq=0
+vfreq=0
+montype=
+}
+	
+if [ $# -ge 1 ]
+then
+	print_eeprom=1
+fi
+
+export name bname freq
+case $version in
+# DEBUG MODE
+#*)
+#	pr_conf="cat sunmodel.input"
+#	;;
+6.*|5.*)
+	# solaris machine
+	pr_conf="/usr/sbin/prtconf -vp"
+	bootprom="Bootprom: `/usr/sbin/prtconf -V`"
+	;;
+4.*)
+	# sunos 4 machine
+	pr_conf="/usr/etc/devinfo -vp"
+	bootprom=
+	;;
+*)
+	echo cant determine sunmodel
+	exit 1
+;;
+esac
+
+$pr_conf | ( egrep -v "$not" ; echo end ) | while read pr_line
+do
+	case $pr_line in
+	Memory?size:*)
+		memsize=`echo $pr_line | sed 's/Memory.size:[ 	]*//'`" "
+	;;
+	dblbuf:*)
+		set $pr_line
+		dblbuf=`hex_to_dec $2`
+	;;
+	vram:*)
+		set $pr_line
+		vmsize=`hex_to_dec $2`
+	;;
+	vmsize:*)
+		set $pr_line
+		vmsize=`hex_to_dec $2`
+	;;
+	tcx-8-bit:*)
+		set $pr_line
+		if [ $# = 1 ]
+		then 
+			depth=8
+		else
+			# don't know yet
+			depth=`hex_to_dec $2`
+		fi
+	;;
+	tcx-24-bit:*)
+		set $pr_line
+		if [ $# = 1 ]
+		then 
+			depth=24
+		else
+			# don't know yet
+			depth=`hex_to_dec $2`
+		fi
+	;;
+	depth:*)
+		set $pr_line
+		depth=`hex_to_dec $2`
+	;;
+	height:*)
+		set $pr_line
+		height=`hex_to_dec $2`
+	;;
+	awidth:*)
+	;;
+	width:*)
+		set $pr_line
+		width=`hex_to_dec $2`
+	;;
+	fbmapped:*)
+		set $pr_line
+		fbmapped=`hex_to_decm $2`
+	;;
+	hfreq:*)
+		set $pr_line
+		hfreq=`hex_to_deck $2`
+	;;
+	vfreq:*|v_freq:*)
+		set $pr_line
+		vfreq=`hex_to_dec $2`
+	;;
+	montype:*)
+		set $pr_line
+		montype=`hex_to_dec $2`
+	;;
+	clock-frequency:*)
+		if [ "$freq" = 0 ]
+		then
+			set $pr_line
+			freq=`hex_to_decm $2`
+		else
+			set $pr_line
+			name_freq=`hex_to_decm $2`
+		fi
+	;;
+	banner-name:*)
+		bname=`echo $pr_line | sed 's/.*banner-name:[	 ]*//'`
+		#pcount=`echo $pr_line | sed 's/.*(\(.*\) X.*//'`
+	;;
+	emulation:*)
+		set $pr_line
+		emulation=$2
+	;;
+	*\'cgthree\'*)
+		if [ "$fb" = "" ]
+		then
+			fb="CG3 `fbuf_calc`"
+		fi
+	;;
+	*\'cgsix\'*)
+		if [ "$fb" = "" ]
+		then
+			fb="GX `fbuf_calc`"
+		fi
+	;;
+	*\'cgtwelve\'*)
+		fb="GS `fbuf_calc`"
+	;;
+	*'SUNW,501-2253'*)
+		fb="TGX-PLUS `fbuf_calc`"
+	;;
+	*'SUNW,501-2325'*)
+		fb="TGX `fbuf_calc`"
+	;;
+	*'SUNW,tcx'*)
+		fb="TCX `fbuf_calc`"
+	;;
+	*'SUNW,afb'*)
+		fb="$fb Elite3D `fbuf_calc`"
+	;;
+	*'SUNW,ffb'*)
+		fb="$fb Creator3D `fbuf_calc`"
+	;;
+	*'SUNW,501-1672'*)
+		fb="GX `fbuf_calc`"
+	;;
+	device-id:*00004750*)
+		fb="ATI PGX24 `fbuf_calc`"
+	;;
+	device-id:*00004754*)
+		fb="ATI PGX8 `fbuf_calc`"
+	;;
+	model:*mk48*)
+		eeprom=`expr "$pr_line" : ".*'\(.*\)'"`
+	;;
+	name:*)
+		if [ "$name" = "" ]
+		then
+			name=`echo $pr_line | sed 's/.*name:[	 ]*//'`
+			if [ "$bname" = "" ]
+			then
+				bname=$name
+			fi
+		fi
+		case $name in
+			*4/20*)
+				bname="'SPARCstation SLC'"
+			;;
+			*4/25*)
+				bname="'SPARCstation ELC'"
+			;;
+			*4/40*)
+				bname="'SPARCstation IPC'"
+			;;
+			*4/50*)
+				bname="'SPARCstation IPX'"
+			;;
+			*4/60[0-9]*)
+			;;
+			*4/60*)
+				bname="'SPARCstation 1'"
+			;;
+			*4/65*)
+				bname="'SPARCstation 1+'"
+			;;
+			*4/75*)
+				bname="'SPARCstation 2'"
+			;;
+		esac
+		fname=`echo $pr_line | sed 's/.*name:[	 ]*//'`
+		case $fname in
+			*Cypress,CY605*)
+				cpu='Cypress,CY605'
+				cpus=`expr $cpus + 1`
+				if [ $name_freq = 0 ]
+				then
+					#SPARCsystem 600MP (4 X CY605)
+					# no freq with in cpu part 
+					name_freq=$freq
+				fi
+				cpuf=$name_freq
+				cpuc= 
+			;;
+			*TI,TMS390Z55*)
+				cpu="Texas Instruments TMS390Z55 1MB S.Cache"
+				cpus=`expr $cpus + 1`
+				cpuf=$name_freq
+				cpuc=1
+			;;
+			*TI,TMS390Z50*)
+				cpu="Texas Instruments TMS390Z50"
+				cpus=`expr $cpus + 1`
+				cpuf=$name_freq
+				cpuc=
+			;;
+			*TI,TMS390S10*)
+				cpu="Texas Instruments TMS390S10 (MicroSparc)"
+				cpus=`expr $cpus + 1`
+				cpuf=$name_freq
+				cpuc=
+			;;
+			*SUNW,UltraSPARC*)
+				cpu="UltraSPARC"
+				cpus=`expr $cpus + 1`
+				cpuf=$name_freq
+				cpuc=
+			;;
+			*Ross,RT625*)
+				cpu="Ross,RT625"
+				cpus=`expr $cpus + 1`
+				if [ $name_freq = 0 ]
+				then
+					#SPARCsystem 600MP (4 X RT625)
+					# no freq with in cpu part 
+					name_freq=$freq
+				fi
+				cpuf=$name_freq
+				cpuc=
+			;;
+		esac
+		save_freq=$name_freq
+		name_freq=0
+	;;
+	device_type:*'cpu'*)
+		if [ $cpuf = 0 ]
+		then
+			cpu="No Name,Send prtconf -vp output to janw@wins.uva.nl"
+		fi
+	;;
+	end)
+		if [ $cpuf = 0 ]
+		then 
+			cpuf=$freq
+		fi
+		if [ `expr "$bname" : "'.*39.Z.*'"` != 0 -a `expr "$bname" : ".*[21]000.*"` = 0 ]
+		then
+		case $cpuf in
+			33.0|30.0)
+				if [ "$cpus" != 1 ]
+				then
+					bname="$bname '(Model 2$cpus)'"
+				else
+					bname="$bname '(Model 20)'"
+				fi
+				freq=$cpuf
+				;;
+			36.0)
+				if [ "$cpus" != 1 ]
+				then
+					bname="$bname '(Model 3$cpus)'"
+				else
+					bname="$bname '(Model 30)'"
+				fi
+				freq=$cpuf
+				;;
+			40.3)
+				if [ "$cpus" != 1 ]
+				then
+					bname="$bname '(Model 4${cpuc}${cpus})'"
+				else
+					bname="$bname '(Model 41)'"
+				fi
+				freq=$cpuf
+				;;
+			45.0|50.0)
+				if [ "$cpus" != 1 ]
+				then
+					bname="$bname '(Model 5${cpuc}${cpus})'"
+				else
+					bname="$bname '(Model 51)'"
+				fi
+				freq=$cpuf
+				;;
+			60.*)
+				if [ "$cpus" != 1 ]
+				then
+					bname="$bname '(Model 6${cpuc}${cpus})'"
+				else
+					bname="$bname '(Model 61)'"
+				fi
+				freq=$cpuf
+				;;
+			*)
+				if [ "$cpus" != 1 ]
+				then
+					bname="$bname '(Model X${cpuc}${cpus})'"
+				fi
+				freq=$cpuf
+				;;
+		esac
+		else
+			if [ $cpus -gt 1 ]
+			then
+				bname="$bname ($cpus X $cpu cpus)"
+			fi
+		fi
+		if [ $print_eeprom = 0 ]
+		then
+			eeprom=
+		fi
+		echo Machine $hostje: $bname @ $cpuf MHz $memsize$fb $eeprom $bootprom
+	;;
+	#*)
+	#	echo $pr_line "?????"
+	#;;
+	esac
+done
