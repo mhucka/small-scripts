@@ -1,0 +1,6 @@
+#!/bin/bash
+
+IP=`curl -s ipecho.net/plain`
+mail -s current IP mhucka@library.caltech.edu <<EOF
+$IP
+EOF
