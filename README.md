@@ -11,35 +11,26 @@ This is a collection of short scripts, written in a variety of programming langu
 
 ----
 
-
-[devonthink-scripts](https://github.com/mhucka/small-scripts/tree/master/devonthink-scripts)
--------
-
-This subdirectory constains scripts useful with [DEVONthink](http://www.devontechnologies.com), a powerful personal database system for the Mac.
-
-
-[omnioutliner-scripts](https://github.com/mhucka/small-scripts/tree/master/omnioutliner-scripts)
--------
-
-This subdirectory constains scripts useful with [OmniOutliner](http://www.omnigroup.com), an outline-oriented editor for the Mac.
-
-
-[sente-scripts](https://github.com/mhucka/small-scripts/tree/master/sente-scripts)
--------
-
-This subdirectory constains scripts useful with [Sente](http://www.thirdstreetsoftware.com/site/Sente.html), an excellent reference manager for the Mac.
-
-
 [mac-scripts](https://github.com/mhucka/small-scripts/tree/master/mac-scripts)
 ------------
 
 This subdirectory constains scripts useful on Mac OS X systems.
 
 
+[misc-scripts](https://github.com/mhucka/small-scripts/tree/master/misc-scripts)
+------------
+
+This subdirectory constains miscellaneous shell scripts.
+
 [git-scripts](https://github.com/mhucka/small-scripts/tree/master/git-scripts)
 -------
 
 This subdirectory contains scripts such as pre-commit hooks for use with git.
+
+[sente-scripts](https://github.com/mhucka/small-scripts/tree/master/sente-scripts)
+-------
+
+This subdirectory constains scripts useful with [Sente](http://www.thirdstreetsoftware.com/site/Sente.html), an excellent reference manager for the Mac.
 
 
 [svn-scripts](https://github.com/mhucka/small-scripts/tree/master/svn-scripts)
