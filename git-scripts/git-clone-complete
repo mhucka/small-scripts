@@ -1,0 +1,30 @@
+#!/bin/sh
+# =============================================================================
+# @file    git-clone-complete
+# @brief   Do a complete git clone of a remote repo, with all its branches
+# @author  Michael Hucka <mhucka@caltech.edu>
+# @license Please see the file named LICENSE in the project directory
+# @website https://github.com/mhucka/small-scripts
+# =============================================================================
+
+if [[ $# -eq 0 ]] ; then
+    echo 'Usage: git-clone-complete SOME_GIT_REPO_URL'
+    exit 0
+elif [[ $# -ne 1 ]] ; then
+    echo 'Error: too many arguments.'
+    echo 'git-clone-complete takes only one argument: the git repository URL.'
+    exit 1
+fi
+
+repo_url=$1
+repo_name=${repo_url##*/}
+repo_name=${repo_name%.*}
+
+# The following code is based on the answer by user Woookie88 on
+# Stack Overflow at https://stackoverflow.com/a/10312587/743730
+
+git clone $repo_url
+cd $repo_name
+git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
+git fetch --all
+git pull --all
