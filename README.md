@@ -1,5 +1,5 @@
-Mike's little scripts
-=====================
+(Some of) Mike's little scripts
+===============================
 
 A collection of short scripts for a variety of purposes.  You are welcome to copy and use as you see fit.
 
