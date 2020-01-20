@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # =============================================================================
 # @file    git-clone-complete
 # @brief   Do a complete git clone of a remote repo, with all its branches
