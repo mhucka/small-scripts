@@ -20,10 +20,10 @@ repo_url=$1
 repo_name=${repo_url##*/}
 repo_name=${repo_name%.*}
 
-# The following code is based on the answer by user Woookie88 on
-# Stack Overflow at https://stackoverflow.com/a/10312587/743730
+# The following code was originally based in part on the 2019-06-09 version of
+# the S.O. answer by Woookie88 at https://stackoverflow.com/a/10312587/743730
 
-git clone $repo_url
+git clone --recursive $repo_url
 cd $repo_name
 git branch -r | grep -v '\->' | while read remote; do git branch --track "${remote#origin/}" "$remote"; done
 git fetch --all
