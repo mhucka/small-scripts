@@ -1,0 +1,32 @@
+#!/bin/bash -x
+# =============================================================================
+# @file    disable-restart-apps
+# @brief   Script to run emacsclient, for use as value of EDITOR env var
+# @created 2021-03-06
+#
+# This is based on the answer posted by user "patrick fogarty" on 2021-01-17
+# to Apple.StackExchange.com at https://apple.stackexchange.com/a/411447
+# =============================================================================
+
+# Figure out the appropriate plist file.
+uuid=$(ioreg -rd1 -c IOPlatformExpertDevice | awk -F'"' '/IOPlatformUUID/{print $4}')
+home=$(dscacheutil -q user -a name mhucka | grep 'dir:' | awk '{print $2}')
+file=${home}/Library/Preferences/ByHost/com.apple.loginwindow.${uuid}.plist
+
+# Delete the plist array.
+if grep -q TALAppsToRelaunchAtLogin $file; then
+    /usr/libexec/PlistBuddy -c 'Delete :TALAppsToRelaunchAtLogin' $file
+fi
+
+# Make the file read-only.
+chflags uimmutable $file
+
+# Save a note to the system log to confirm this was done.
+# To read the log using the following command:
+#
+#   log show --predicate 'eventMessage contains "disable-restart-apps"'
+#
+# (Note: the log printing command above will be faster if you give it an
+# argument to limit the time, such as --last 30m, but that only works if you
+# run it shortly after logging in.)
+logger "disable-restart-apps completed successfully"
