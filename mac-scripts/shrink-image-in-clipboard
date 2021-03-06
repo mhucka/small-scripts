@@ -1,0 +1,13 @@
+#!/bin/bash
+# =============================================================================
+# This code was originally based on a posting by "JustinParker" on 2014-05-02
+# to Apple Stack Exchange: https://apple.stackexchange.com/a/129428/6489
+# =============================================================================
+
+TMPFILE=$(mktemp /tmp/corsproxy.XXXXXX)
+trap 'rm -f -- "$TMPFILE"' INT TERM HUP EXIT
+
+pngpaste $TMPFILE
+width=$((`sips -g pixelWidth $TMPFILE | cut -s -d ':' -f 2 | cut -c 2-` / 2))
+sips -Z $width $TMPFILE
+impbcopy $TMPFILE
