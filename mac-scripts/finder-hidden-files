@@ -1,0 +1,32 @@
+#!/bin/bash -x
+# =============================================================================
+# @file    finder-show-hidden
+# @brief   Tell the Finder to show hidden files and restart the Finder
+# @author  Michael Hucka (mhucka@caltech.edu), Caltech
+# @license CC BY-SA 3.0
+#
+# Usage: "finder-hidden-files show" or "finder-hidden-files hide"
+#
+# This code was originally based on a posting by "Daniel" on 2014-05-02
+# to Apple Stack Exchange: https://apple.stackexchange.com/a/58714/6489
+# =============================================================================
+
+# For reasons I cannot figure out, running this script does not always work
+# the first time -- sometimes I have to run it again before the change takes
+# place.  I have tried everything I can think of: put a sleep between the
+# defaults and the killall, run the defaults command twice, run the killall
+# twice, run them all twice, run them all twice with sleeps in-between, etc.
+# I'm stumped.  I left it as the basic version without any sleeps or anything
+# else because none of that made a difference, but if you're experiencing the
+# same issue and are thinking of trying all those things: don't bother.
+
+case $1 in
+    hide)
+        defaults write com.apple.Finder AppleShowAllFiles -bool NO
+        killall -HUP Finder
+        ;;
+    *)
+        defaults write com.apple.Finder AppleShowAllFiles -bool YES
+        killall -HUP Finder
+        ;;
+esac
