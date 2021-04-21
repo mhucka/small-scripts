@@ -1,7 +1,7 @@
-#!/bin/bash -x
+#!/bin/bash
 # =============================================================================
 # @file    disable-restart-apps
-# @brief   Script to run emacsclient, for use as value of EDITOR env var
+# @brief   Prevent macOS from restarting apps after a crash
 # @created 2021-03-06
 #
 # This is based on the answer posted by user "patrick fogarty" on 2021-01-17
