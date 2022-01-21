@@ -89,13 +89,6 @@ def nsdata(obj, encoding = 'utf-8'):
 
 
 def parsed_arguments(options):
-    no_gui = ('-G' in sys.argv[1:] or '--no-gui' in sys.argv[1:])
-
-    # Sanity check the options given on the command line.
-    valid_flags = [flag for option in options for flag in option[0:2]]
-    if any(arg.startswith('-') and arg not in valid_flags for arg in sys.argv[1:]):
-        fatal(f'Unrecognized option supplied on command line.', no_gui)
-
     # Construct True/False list based on whether corresponding option is given.
     values = []
     for index, option in enumerate(options):
@@ -104,7 +97,8 @@ def parsed_arguments(options):
         values.append(flag_present)
 
     # Values unrecognized as options are assumed to be the arguments.
-    args = [arg for arg in sys.argv[1:] if not arg.startswith('-')]
+    flags = [opt[0] for opt in options] + [opt[1] for opt in options]
+    args = [arg for arg in sys.argv[1:] if not arg in flags]
     return values + ([args] if args else [None])
 
 
