@@ -3,7 +3,6 @@
 # @file    finder-show-hidden
 # @brief   Tell the Finder to show hidden files and restart the Finder
 # @author  Michael Hucka (mhucka@caltech.edu), Caltech
-# @license CC BY-SA 3.0
 #
 # Usage: "finder-hidden-files show" or "finder-hidden-files hide"
 #
