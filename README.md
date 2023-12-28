@@ -17,11 +17,10 @@ Table of contents
 Introduction
 ------------
 
-This is a collection of short scripts, written in a variety of programming languages and for a variety of purposes.  You are welcome to copy and use them as you see fit.  If you discover problems or can think of improvements, please me know, either using GitHub's commenting system, or a pull request, or directly via email ([mhucka@caltech.edu](mhucka@caltech.edu)).  These scripts are distributed under BSD open-source license.
+This is a collection of short scripts, written in a variety of programming languages and for a variety of purposes.  You are welcome to copy and use them as you see fit.  If you discover problems or can think of improvements, please me know, either using GitHub's commenting system, or a pull request, or directly via email ([mhucka@caltech.edu](mhucka@caltech.edu)).  These scripts are distributed under a BSD open-source license.
 
 The following is a listing of the categories of scripts contained here:
 
-* [`mac-scripts`](https://github.com/mhucka/small-scripts/tree/master/mac-scripts) &ndash; scripts useful on Mac OS X systems
 * [`misc-scripts`](https://github.com/mhucka/small-scripts/tree/master/misc-scripts) &ndash; miscellaneous shell scripts
 * [`git-scripts`](https://github.com/mhucka/small-scripts/tree/master/git-scripts)  &ndash; scripts for working with git
 
@@ -30,6 +29,10 @@ The following are obsolete because I don't use the software anymore, but kept he
 * [`sente-scripts`](https://github.com/mhucka/small-scripts/tree/master/sente-scripts) &ndash; scripts useful with [Sente](http://www.thirdstreetsoftware.com/site/Sente.html), a reference manager for the Mac
 * [`svn-scripts`](https://github.com/mhucka/small-scripts/tree/master/svn-scripts)  &ndash; scripts useful with Subversion
 * [`x-windows-scripts`](https://github.com/mhucka/small-scripts/tree/master/x-windows-scripts) &ndash; scripts useful for X Windows system environments
+
+The following have been moved to separate repos:
+
+* [`mac-scripts`](https://github.com/mhucka/mac-scripts) &ndash; scripts useful on Mac OS X systems
 
 
 Installation
