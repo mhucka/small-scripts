@@ -1,0 +1,30 @@
+#!/bin/bash
+# Script to run emacsclient, for use as value of the EDITOR environment var.
+#
+# This became necessary when I found it impossible to use a value of EDITOR
+# that had a command with arguments (or at least, such a value of EDITOR
+# didn't work for editing crontabs in macOS 10.13.6).
+#
+# Copyright 2024 Michael Hucka.
+# License: MIT License – see file "LICENSE" in the project website.
+# Website: https://github.com/mhucka/small-scripts
+
+cmd=emacsclient
+if [ -e /Applications/Emacs/Emacs.app/Contents/MacOS/bin/emacsclient ]; then
+    cmd=/Applications/Emacs/Emacs.app/Contents/MacOS/bin/emacsclient
+fi
+
+tramp_arg=""
+
+# Not all remote hosts set SSH_CONNECTION. CentOS doesn't, but Ubuntu does.
+if [[ ${SSH_CONNECTION:+set} ]]; then
+    host=$(hostname -f)
+    port=$(echo $SSH_CONNECTION | rev | cut -f1 -d' ')
+    tramp_arg="--tramp=/ssh:$host#$port:"
+fi
+
+$cmd -q \
+     $tramp_arg \
+     --socket-name=$HOME/.ssh/server \
+     --alternate-editor 'emacs -nw' "$@" \
+    || emacs -nw "$@"
