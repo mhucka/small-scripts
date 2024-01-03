@@ -1,10 +1,9 @@
 #!/bin/bash
-# =============================================================================
-# @file    mapsite
-# @brief   Generate a sitemap starting from a URL
-# @author  Michael Hucka <mhucka@caltech.edu>
-# @license Please see the file named LICENSE in the project directory
-# =============================================================================
+# Generate a sitemap starting from a URL
+#
+# Copyright 2024 Michael Hucka.
+# License: MIT License – see file "LICENSE" in the project website.
+# Website: https://github.com/mhucka/small-scripts
 
 version_number="1.1.0"
 website="https://github.com/mhucka/small-scripts"

@@ -1,5 +1,9 @@
 #!/bin/bash
 # Configure up a git repo to handle AppleScript files.
+#
+# Copyright 2024 Michael Hucka.
+# License: MIT License – see file "LICENSE" in the project website.
+# Website: https://github.com/mhucka/small-scripts
 
 if [[ ! -d .git ]]; then
     echo "This directory does not appear to be the top level of a git repo."

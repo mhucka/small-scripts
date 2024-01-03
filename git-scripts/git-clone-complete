@@ -1,11 +1,9 @@
 #!/bin/bash
-# =============================================================================
-# @file    git-clone-complete
-# @brief   Do a complete git clone of a remote repo, with all its branches
-# @author  Michael Hucka <mhucka@caltech.edu>
-# @license Please see the file named LICENSE in the project directory
-# @website https://github.com/mhucka/small-scripts
-# =============================================================================
+# Do a complete git clone of a remote repo, with all its branches.
+#
+# Copyright 2024 Michael Hucka.
+# License: MIT License – see file "LICENSE" in the project website.
+# Website: https://github.com/mhucka/small-scripts
 
 if [[ $# -eq 0 ]] ; then
     echo 'Usage: git-clone-complete SOME_GIT_REPO_URL'
