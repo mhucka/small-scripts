@@ -2,6 +2,11 @@
 
 A collection of short scripts for a variety of purposes.  You are welcome to copy and use as you see fit.
 
+[![License](https://img.shields.io/badge/License-MIT-lightgray.svg?style=flat-square)](https://github.com/mhucka/small-scripts/blob/main/LICENSE)
+![Shell Script](https://img.shields.io/badge/shell_script-%236699dd.svg?label=Bash&logo=gnu-bash&logoColor=white&style=flat-square)
+![Emacs](https://img.shields.io/badge/Emacs-%237F5AB6.svg?&style=flat-square&logo=gnu-emacs&logoColor=white)
+
+
 ## Table of contents
 
 * [Introduction](#introduction)
