@@ -1,0 +1,11 @@
+#!/bin/sh -x
+
+cd ~
+ln -s ./system/bin
+ln -s ./system/lib
+ln -s ./system/share
+for file in `/bin/ls -A ./system/dot-files`; do
+    ln -f -s ./system/dot-files/$file $file
+done
+
+ln -f -s ./system/dot-files/.bash_profile .profile
