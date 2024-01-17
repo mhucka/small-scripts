@@ -18,8 +18,8 @@ This is a collection of short scripts, written in a variety of programming langu
 
 The following is a listing of the categories of scripts contained here:
 
-* [`misc-scripts`](https://github.com/mhucka/small-scripts/tree/master/misc-scripts) &ndash; miscellaneous shell scripts
-* [`git-scripts`](https://github.com/mhucka/small-scripts/tree/master/git-scripts)  &ndash; scripts for working with git
+* [`misc-scripts`](https://github.com/mhucka/small-scripts/tree/main/misc-scripts) &ndash; miscellaneous shell scripts
+* [`git-scripts`](https://github.com/mhucka/small-scripts/tree/main/git-scripts)  &ndash; scripts for working with git
 
 The following have been moved to separate repos:
 
@@ -27,9 +27,9 @@ The following have been moved to separate repos:
 
 The following are obsolete because I don't use the software anymore, but kept here for historical reasons.  Some of these are ancient and haven't been tried for a decade or more:
 
-* [`sente-scripts`](https://github.com/mhucka/small-scripts/tree/master/sente-scripts) &ndash; scripts useful with [Sente](http://www.thirdstreetsoftware.com/site/Sente.html), a reference manager for the Mac
-* [`svn-scripts`](https://github.com/mhucka/small-scripts/tree/master/svn-scripts)  &ndash; scripts useful with Subversion
-* [`x-windows-scripts`](https://github.com/mhucka/small-scripts/tree/master/x-windows-scripts) &ndash; scripts useful for X Windows system environments
+* [`sente-scripts`](https://github.com/mhucka/small-scripts/tree/main/sente-scripts) &ndash; scripts useful with [Sente](http://www.thirdstreetsoftware.com/site/Sente.html), a reference manager for the Mac
+* [`svn-scripts`](https://github.com/mhucka/small-scripts/tree/main/svn-scripts)  &ndash; scripts useful with Subversion
+* [`x-windows-scripts`](https://github.com/mhucka/small-scripts/tree/main/x-windows-scripts) &ndash; scripts useful for X Windows system environments
 
 
 ## Installation

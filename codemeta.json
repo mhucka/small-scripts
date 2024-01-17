@@ -47,14 +47,14 @@
     }
   ],
   "copyrightYear": 2024,
-  "license": "https://github.com/mhucka/small-scripts/blob/master/LICENSE",
+  "license": "https://github.com/mhucka/small-scripts/blob/main/LICENSE",
   "isAccessibleForFree": true,
   "url": "",
   "codeRepository": "https://github.com/mhucka/small-scripts",
   "readme": "https://github.com/mhucka/small-scripts/blob/main/README.md",
   "releaseNotes": "https://github.com/mhucka/small-scripts/blob/main/CHANGES.md",
   "issueTracker": "https://github.com/mhucka/small-scripts/issues",
-  "downloadUrl": "https://github.com/mhucka/small-scripts/archive/master.zip",
+  "downloadUrl": "https://github.com/mhucka/small-scripts/archive/main.zip",
   "keywords": [
     "software",
     "command line",
