@@ -4,8 +4,8 @@
   "name": "(Some of) Mike's little scripts",
   "identifier": "small-scripts",
   "description": "A collection of personal short scripts for a variety of purposes.",
-  "version": "0.0.5",
-  "datePublished": "2024-01-17",
+  "version": "0.0.6",
+  "datePublished": "2024-02-14",
   "dateCreated": "2014-12-06",
   "author": [
     {
@@ -49,7 +49,7 @@
   "copyrightYear": 2024,
   "license": "https://github.com/mhucka/small-scripts/blob/main/LICENSE",
   "isAccessibleForFree": true,
-  "url": "",
+  "url": "https://github.com/mhucka/small-scripts",
   "codeRepository": "https://github.com/mhucka/small-scripts",
   "readme": "https://github.com/mhucka/small-scripts/blob/main/README.md",
   "releaseNotes": "https://github.com/mhucka/small-scripts/blob/main/CHANGES.md",
