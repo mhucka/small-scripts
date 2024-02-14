@@ -1,4 +1,4 @@
-# Repository-specific file attributes assignments for git.
+# Summary: repository-specific file attributes assignments for git.
 #
 # Copyright 2024 Michael Hucka.
 # License: MIT License – see file "LICENSE" in the project website.
@@ -67,3 +67,7 @@ Makefile	text
 *.tiff	binary
 *.xls	binary
 *.zip	binary
+
+# Interpretation of Mac-specific files ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*.shortcut	binary
