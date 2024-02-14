@@ -11,7 +11,6 @@ A collection of short scripts for a variety of purposes.  You are welcome to cop
 
 * [Introduction](#introduction)
 * [Installation](#installation)
-* [Usage](#usage)
 * [Getting help](#getting-help)
 * [License](#license)
 * [Authors and history](#authors-and-history)
