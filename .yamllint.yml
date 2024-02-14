@@ -1,0 +1,15 @@
+# Summary: configuration file for .github/workflows/yaml-linter.yml.
+#
+# Copyright 2024 Michael Hucka.
+# License: MIT License – see file "LICENSE" in the project website.
+# Website: https://github.com/mhucka/template
+
+rules:
+  colons:
+    max-spaces-after: -1
+  quoted-strings:
+    required: only-when-needed
+  document-start:
+      present: false
+  document-end:
+      present: false
