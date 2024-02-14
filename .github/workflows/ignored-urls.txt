@@ -1,0 +1,3 @@
+https://github.com/mhucka/small-scripts/tree/main/x-windows-scripts
+https://github.com/mhucka/small-scripts/tree/main/sente-scripts
+https://github.com/mhucka/small-scripts/tree/main/svn-scripts
